@@ -48,6 +48,5 @@ class login_view():
         else:
             self.window.destroy()
             print("Đăng nhập thành công")
-            mainView.createMainView()
-
+            # mainView.createMainView()
 login_view()

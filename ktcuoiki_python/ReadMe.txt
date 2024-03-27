@@ -1,7 +1,12 @@
 
 Multiprocessing
 pip install pypyodbc
-pip instal tkinter
+pip install tkinter
+pip install python-dotenv
+
+
+
+from dotenv import load_dotenv
 from tkinter import ttk
 ***ttk.Treeview
 Show bảng dữ liệu từ được lấy từ database lên giao diện

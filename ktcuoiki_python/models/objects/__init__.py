@@ -1,1 +1,1 @@
-__all__ = ["hocphan", "sinhvien"]
+__all__ = ["hocphan", "sinhvien","dkhp","giatinchi"]

@@ -1,1 +1,1 @@
-__all__ = ["dangkyService","hocphanService","loginService"]
+__all__ = ["dangkyService","hocphanService","loginService","sinhvienService","giatinchiService"]

@@ -1,12 +1,14 @@
 import pypyodbc as odbc
-# import pyodbc
+# import os
+# from dotenv import load_dotenv
+#
+# load_dotenv('../../env.env')
 def connect():
-    connection = odbc.connect(
-    "Driver={SQL Server};Server=MSI;Database=QLSV;UID=sa;PWD=khoivo99122;Trusted_Connection=Yes;"
-    )
+    # driver = os.getenv('driver')
+    # server = os.getenv('serverName')
+    # db = os.getenv('db')
+    # user = os.getenv('user')
+    # pwd = os.getenv('pwd')
+    connection = odbc.connect("Driver={SQL Server};Server=MSI;Database=QLSV;Trusted_Connection=Yes;")
     return connection
-
-    # connection = pyodbc.connect(
-    #     "DRIVER={SQL Server};SERVER=MSI;DATABASE=QLSV;UID=sa;PWD=khoivo99122"
-    # )
-# connect()
+# print(connect())

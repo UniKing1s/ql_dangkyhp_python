@@ -1,20 +1,6 @@
-from ktcuoiki_python.models.cruds import dangkyService,hocphanService
+from ktcuoiki_python.models.cruds import hocphanService
 import tkinter as tk
 from tkinter import ttk
-import asyncio
-
-def createMainView():
-    window = tk.Tk()
-    window.title("Cửa sổ đơn giản")
-    # window.geometry("1280x720")
-    frame = tk.Frame(window,width=window.winfo_width(),height=window.winfo_height())
-    #
-    label_frame = lb_frame(frame)
-    lst_table = table(frame,label_frame)
-
-    frame.pack()
-    #
-    window.mainloop()
 class lb_frame():
     def __init__(self, frame):
         self.txt_mhp = tk.StringVar()
@@ -24,7 +10,7 @@ class lb_frame():
         self.load(frame)
     def load(self,frame):
         infohp_lbframe = tk.LabelFrame(frame, text="Thông tin học phần")
-        infohp_lbframe.grid(row=1, column=0)
+        infohp_lbframe.grid(row=0, column=0,padx=10, pady=10)
         # Tạo label
         mahp_lb = tk.Label(infohp_lbframe, text="Mã học phần:")
         tenhp_lb = tk.Label(infohp_lbframe, text="Tên học phần:")
@@ -71,8 +57,6 @@ class table():
         for i in selection:
             store = self.table.item(i, "values")
             self.lb_frame.setInfo(store[0],store[1],store[2],store[3])
-
-createMainView()
 
 
 
