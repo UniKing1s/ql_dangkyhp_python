@@ -10,7 +10,8 @@ class lb_frame():
         self.load(frame)
     def load(self,frame):
         infohp_lbframe = tk.LabelFrame(frame, text="Thông tin học phần")
-        infohp_lbframe.grid(row=0, column=0,padx=10, pady=10)
+        # infohp_lbframe.grid(row=0, column=0,padx=10, pady=10)
+        infohp_lbframe.pack(fill='both',expand=True)
         # Tạo label
         mahp_lb = tk.Label(infohp_lbframe, text="Mã học phần:")
         tenhp_lb = tk.Label(infohp_lbframe, text="Tên học phần:")
@@ -42,13 +43,29 @@ class table():
     def __init__(self, frame, label_frame):
         self.lb_frame = label_frame
         self.table = ttk.Treeview(frame, columns=("1", "2", "3", "4"), show="headings",selectmode="browse")
-        self.load_table()
-    def load_table(self):
-        self.table.heading("1", text="Mã học phần")
+        self.load_table(frame)
+    def load_table(self,frame):
+        self.table.heading("1", text="Mã HP")
         self.table.heading("2", text="Tên học phần")
-        self.table.heading("3", text="Số tín chỉ")
+        self.table.heading("3", text="STC")
         self.table.heading("4", text="Học kỳ")
-        self.table.grid(row=0, column=0)
+        style = ttk.Style(self.table)
+        style.configure('Treeview', rowheight=40)
+        self.table.column('1',width=50, minwidth=60)
+        # self.table.column('2',width=175, minwidth=200)
+        # self.table.column('3',width=30, minwidth=40)
+        # self.table.column('4',width=30, minwidth=40)
+
+
+
+
+        # self.table.grid(row=0, column=0)
+        self.table.pack(fill='both',expand=True)
+        scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL, command= self.table.xview)
+        self.table.configure(xscrollcommand=scroll.set)
+        scroll.pack(side=tk.BOTTOM, fill='x')
+
+
         for i in hocphanService.getAll():
             self.table.insert(parent='', index=tk.END, values=i.showInfo())
         self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)

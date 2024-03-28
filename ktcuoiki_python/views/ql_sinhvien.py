@@ -13,7 +13,8 @@ class lb_frame():
         self.load(frame)
     def load(self,frame):
         infohp_lbframe = tk.LabelFrame(frame, text="Thông tin sinh viên")
-        infohp_lbframe.grid(row=0, column=0,padx=10, pady=10)
+        # infohp_lbframe.grid(row=0, column=0,padx=10, pady=10)
+        infohp_lbframe.pack(fill='both',expand=True)
         # Tạo label
         massv_lb = tk.Label(infohp_lbframe, text="Mã Số Sinh Viên:")
         hosv_lb = tk.Label(infohp_lbframe, text="Họ Đệm:")
@@ -63,19 +64,32 @@ class table():
     def __init__(self, frame, label_frame):
         self.lb_frame = label_frame
         self.table = ttk.Treeview(frame, columns=("1", "2", "3", "4","5","6","7"), show="headings",selectmode="browse")
-        self.load_table()
-    def load_table(self):
-        self.table.heading("1", text="Mã Số Sinh Viên")
-        self.table.heading("2", text="Họ Sinh Viên")
-        self.table.heading("3", text="Tên Sinh Viên")
+        self.load_table(frame)
+    def load_table(self,frame):
+        self.table.heading("1", text="MSSV")
+        self.table.heading("2", text="Họ Đệm")
+        self.table.heading("3", text="Tên")
         self.table.heading("4", text="Ngày Sinh")
         self.table.heading("5", text="Giới Tính")
         self.table.heading("6", text="Nơi Sinh")
         self.table.heading("7", text="Mã Lớp ")
-        self.table.grid(row=0, column=0)
+        self.table.pack(fill='both',expand=True)
+        self.table.column('1',width=75, minwidth=100)
+        self.table.column('2',width=100, minwidth=125)
+        self.table.column('3',width=75, minwidth=100)
+        self.table.column('4',width=100, minwidth=125)
+        self.table.column('5',width=60, minwidth=70)
+        self.table.column('6',width=75, minwidth=100)
+        self.table.column('7',width=50, minwidth=75)
+        style = ttk.Style(self.table)
+        style.configure('Treeview', rowheight = 40)
+        # self.table.grid(row=0, column=0, rowspan= 7)
         for i in sinhvienService.getAll():
             self.table.insert(parent='', index=tk.END, values=i.showInfo())
         self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
+        scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL, command= self.table.xview)
+        self.table.configure(xscrollcommand=scroll.set)
+        scroll.pack(side=tk.BOTTOM, fill='x')
     def handle_selectItem(self, event):
         selection = self.table.selection()
         for i in selection:

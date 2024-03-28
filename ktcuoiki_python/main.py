@@ -5,38 +5,61 @@ def create_mainview():
     root = Tk()
     # image = tk.PhotoImage(file="./public/image/nhom10.png")
     root.title('Ứng Dụng Quản Lý Đăng Ký Học Phần')
+    # root.geometry('500x500')
     root.minsize(height=500, width=500)
-    root.resizable(False,False)
-    # Title label
-    Label(root, text='Ứng Dụng Quản Lý Đăng Ký Học Phần', fg='blue', font=('cambria', 20,'bold'), width=30).grid(row=0, columnspan=7)  # Cải thiện: Merge cells bằng columnspan
+    # root.resizable(False,False)
+    #icon
     root.iconbitmap("./public/image/nhom10.ico")
-    # root.iconphoto(image)
+
+
     # Frame
     frame = Frame(root)
-    frame.grid(sticky=NSEW)  # Fix the error by adding sticky
+    # frame.grid(sticky=NSEW)  # Fix the error by adding sticky
+    # frame.pack(fill=tk.BOTH,expand=True)
+    frame.pack(fill='both',expand=True)
+    # Title label
+    tittle = Label(frame, text='Ứng Dụng Quản Lý Đăng Ký Học Phần', fg='blue', font=('cambria', 20,'bold'),width=30)#.grid(row=0, columnspan=7)  # Cải thiện: Merge cells bằng columnspan
+    # tittle.pack(fill=tk.BOTH)
+    tittle.pack(fill='x')
 
+    btn_frame_label = tk.LabelFrame(frame, text='Danh mục quản lý', borderwidth='2')
+    # btn_frame_label.place(y=0)
+    btn_frame_label.pack(fill='x')
     # Buttons
-    button2 = Button(frame, text="Quản Lý Học Phần", activebackground="#999999")
+    button2 = Button(btn_frame_label, text="Quản Lý Học Phần", activebackground="#999999")
     button2.grid(row=0, column=1, padx=5, pady=10)
 
-    button3 = Button(frame, text="Quản Lý Sinh Viên",activebackground="#999999")
+    button3 = Button(btn_frame_label, text="Quản Lý Sinh Viên",activebackground="#999999")
     button3.grid(row=0, column=2, padx=5, pady=10)
 
-    button4 = Button(frame, text="Quản Lý Giá Tín Chỉ",activebackground="#999999")
+    button4 = Button(btn_frame_label, text="Quản Lý Giá Tín Chỉ",activebackground="#999999")
     button4.grid(row=0, column=3, padx=5, pady=10)
 
-    button5 = Button(frame, text="Quản Lý Đăng Ký Học Phần",activebackground="#999999")
+    button5 = Button(btn_frame_label, text="Quản Lý Đăng Ký Học Phần",activebackground="#999999")
     button5.grid(row=0, column=4, padx=5, pady=10)
 
     # table
-    frame_table = Frame(frame, width=100, height=20)
-    frame_table.grid(row=1, column=0, columnspan=7, padx=10, pady=10)
-    frame_input = Frame(frame)
-    frame_input.grid(row=1, column=9, columnspan=3)
+    # frame_table = Frame(frame, width=650, height=200)
+    # frame_table.pack(fill='x')
+
+
+    frame_label_table = tk.LabelFrame(frame,text= 'Danh sách thông tin')
+    frame_label_table.pack(side=tk.LEFT,fill='both',expand=True)
+    lb = tk.Label(frame_label_table, text='Bảng')
+    lb.pack()
+    # frame_table.grid(row=1, column=0, columnspan=7, padx=10, pady=10)
+    frame_input = tk.LabelFrame(frame,text='Thông tin')
+    frame_input.pack(fill='both',side=tk.LEFT)
+    frame_for_infor = tk.Frame(frame_input)
+    frame_for_infor.pack(fill='both',expand=True)
+
+    lb1 = tk.Label(frame_for_infor, text='input')
+    lb1.pack()
+    # frame_input.grid(row=1, column=9, columnspan=3)
     # create_QLSV(frame_table,frame_input)
     # # Scrollbar
-    scrollbar = Scrollbar(frame, orient="vertical")  # command=frame_table.yview()
-    scrollbar.grid(row=1, column=7, sticky='ns', pady=10)  # Fix the error here
+    # scrollbar = Scrollbar(frame, orient="vertical")  # command=frame_table.yview()
+    # scrollbar.grid(row=1, column=7, sticky='ns', pady=10)  # Fix the error here
 
     # Link Listbox with Scrollbar
     # lb.config(yscrollcommand=scrollbar.set)
@@ -46,18 +69,25 @@ def create_mainview():
     # table2 = ql_hocphan.table(frame_table2,lb_frame2)
     # them , xoa , sua
 
-    button8 = Button(frame, text="Thêm",activebackground="#999999")
-    button8.grid(row=4, column=9, padx=10, pady=10)
 
-    button9 = Button(frame, text="Xoá",activebackground="#999999")
-    button9.grid(row=4, column=10, padx=10, pady=10)
+    btn_frame_label_chucnang = tk.LabelFrame(frame_input,text= 'Chức năng')
+    btn_frame_label_chucnang.pack(side=tk.BOTTOM, fill='x', anchor=tk.CENTER)
+    button8 = Button(btn_frame_label_chucnang, text="Thêm", activebackground="#999999")
+    # button8.grid(row=0, column=1, padx=10, pady=10)
+    button8.pack(side=tk.LEFT, fill='both', expand=True)
+    button9 = Button(btn_frame_label_chucnang, text="Xoá", activebackground="#999999")
+    # button9.grid(row=0, column=2, padx=10, pady=10)
+    button9.pack(side=tk.BOTTOM, fill='both', expand=True)
 
-    button10 = Button(frame, text="Sửa",activebackground="#999999")
-    button10.grid(row=4, column=11, padx=10, pady=10)
-    button2.config(command= lambda : create_QLHP(frame_table, frame_input,root))
-    button3.config(command= lambda : create_QLSV(frame_table, frame_input,root))
-    button4.config(command= lambda : create_QLGIATC(frame_table,frame_input,root))
-    button5.config(command= lambda : create_QLDKHP(frame_table, frame_input,root))
+    button10 = Button(btn_frame_label_chucnang, text="Sửa", activebackground="#999999")
+    # button10.grid(row=0, column=3, padx=10, pady=10)
+    button10.pack(side=tk.RIGHT, fill='both', expand=True)
+
+    ##set event
+    button2.config(command= lambda : create_QLHP(frame_label_table, frame_for_infor,root))
+    button3.config(command= lambda : create_QLSV(frame_label_table, frame_for_infor,root))
+    button4.config(command= lambda : create_QLGIATC(frame_label_table,frame_for_infor,root))
+    button5.config(command= lambda : create_QLDKHP(frame_label_table, frame_for_infor,root))
     # button2.config(state= tk.DISABLED)
     root.mainloop()
 
