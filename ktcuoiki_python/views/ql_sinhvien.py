@@ -66,7 +66,7 @@ class lb_frame():
         self.btn_sua.config(command= lambda : self.update_sv())
         self.btn_xoa.config(command=lambda: self.delete_sv())
     def subscribe_table(self, table):
-        self.table = table;
+        self.table = table
     def setInfo(self, massv,hosv, tensv,ngaysinh,gioitinh,noisinh,malop):
         self.txt_massv.set(massv)
         self.txt_hosv.set(hosv)
