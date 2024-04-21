@@ -54,7 +54,7 @@ class lb_frame():
         mahp_lb = tk.Label(infohp_lbframe, text="Mã học phần:",font = ("Arial", 11, "bold"))
         tenhp_lb = tk.Label(infohp_lbframe, text="Tên học phần:",font = ("Arial", 11, "bold"))
         stc_lb = tk.Label(infohp_lbframe, text="Số tín chỉ:",font = ("Arial", 11, "bold"))
-        hocki_lb = tk.Label(infohp_lbframe, text="Học kì: ",font = ("Arial", 11, "bold"))
+        hocki_lb = tk.Label(infohp_lbframe, text="Học kỳ: ",font = ("Arial", 11, "bold"))
         # Tạo ô nhập
         mahp_entry = tk.Label(infohp_lbframe, textvariable=self.txt_mhp)
         tenhp_entry = tk.Label(infohp_lbframe, textvariable=self.txt_tenhp)
