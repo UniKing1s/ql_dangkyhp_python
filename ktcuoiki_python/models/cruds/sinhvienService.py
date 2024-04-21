@@ -26,7 +26,10 @@ def getAllSVByMasv(masv):
     cursor.execute(f"Select * from sinhvien where masv = {masv}")
     rows = cursor.fetchall()
     conn.close()
-    return rows
+    lst = []
+    for row in rows:
+        lst.append(Sinhvien(row[0],row [1], row[2], row [3], row[4],row[5],row[6]))
+    return lst
 def insert(sv):
     conn = open_connection()
     cursor.execute(f"insert into sinhvien values('{(int(getMaxMasv()[0][0]) + 1)}',N'{sv.hodem}',N'{sv.ten}','{sv.ngaysinh}',{sv.gioitinh},N'{sv.noisinh}','{sv.malop}')")
@@ -53,3 +56,4 @@ def getMaxMasv():
 # print(getMaxMasv()[0][0])
 # sv = Sinhvien((int(getMaxMasv()[0][0])), "Võ Anh","Khôi", "2024-03-31", 1, "đáva", "DL24")
 # delete('8656')
+# print(getAllSVByMasv('2401'))

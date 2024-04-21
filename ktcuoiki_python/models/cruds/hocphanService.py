@@ -34,7 +34,10 @@ def getAllHpBySV(masv):
     cursor.execute(f"Select * from hocphan where mahp not in (select mahp from dkhp where masv = '{masv}')")
     rows = cursor.fetchall()
     conn.close()
-    return rows
+    lst = []
+    for row in rows:
+        lst.append(hocphan(row[0], row[1], row[2], row[3]))
+    return lst
 def insert(hocphan):
     maxMahp = (int(getMaxMasv()[0][0]) + 1)
     conn = open_connection()

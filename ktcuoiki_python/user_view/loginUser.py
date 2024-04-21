@@ -1,5 +1,6 @@
 import tkinter as tk
 from ktcuoiki_python.models.cruds import loginService
+from ktcuoiki_python.user_view.UserView import main_view_user
 from ktcuoiki_python.views import ql_hocphan
 from setuptools.msvc import winreg
 
@@ -46,7 +47,10 @@ class login_view():
         if len(loginService.checkLogin(self.masv_input.get(),self.pas_input.get())) == 0:
             print("Thông tin sai")
         else:
+            mssv = self.masv_input.get()
+            view = main_view_user(mssv)
             self.window.destroy()
             print("Đăng nhập thành công")
+
             # mainView.createMainView()
 login_view()
