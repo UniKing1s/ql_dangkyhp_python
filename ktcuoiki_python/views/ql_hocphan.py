@@ -1,13 +1,19 @@
 from ktcuoiki_python.models.cruds import hocphanService
+from ktcuoiki_python.models.objects.hocphan import hocphan
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 class lb_frame():
-    def __init__(self, frame):
+    def __init__(self, frame, btn_them, btn_sua, btn_xoa):
         self.txt_mhp = tk.StringVar()
         self.txt_tenhp = tk.StringVar()
         self.txt_stc = tk.StringVar()
         self.txt_hk = tk.StringVar()
+        self.btn_them = btn_them
+        self.btn_sua = btn_sua
+        self.btn_xoa = btn_xoa
         self.load(frame)
+
     def load(self,frame):
         infohp_lbframe = tk.LabelFrame(frame, text="Thông tin học phần")
         # infohp_lbframe.grid(row=0, column=0,padx=10, pady=10)
@@ -33,11 +39,49 @@ class lb_frame():
         tenhp_entry.grid(row=1, column=1)
         stc_entry.grid(row=2, column=1)
         hocki_entry.grid(row=3, column=1)
+        ###setting for button them sua xoa command
+        self.btn_them.config(command=lambda: self.insert_hp())
+        self.btn_xoa.config(command=lambda: self.delete_hp())
+        self.btn_sua.config(command = lambda: self.update_hp())
     def setInfo(self, mahp,tenhp, stc,hocki):
         self.txt_mhp.set(mahp)
         self.txt_tenhp.set(tenhp)
         self.txt_stc.set(stc)
         self.txt_hk.set(hocki)
+    def insert_hp(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Mã học phần sẽ tự động tạo mới!\nBạn có muốn thêm học phần này không?")
+        if check == "yes":
+            try:
+                hp = hocphan(self.txt_mhp.get(),self.txt_tenhp.get(),self.txt_stc.get(),self.txt_hk.get())
+                hocphanService.insert(hp)
+                box = messagebox.showinfo("Thông báo", "Thêm học phần thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Thêm học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+    def delete_hp(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Bạn có chắc là xóa học phần này không?")
+        if check == "yes":
+            try:
+                hp = hocphan(self.txt_mhp.get(),self.txt_tenhp.get(),self.txt_stc.get(),self.txt_hk.get())
+                hocphanService.delete(hp.mahp)
+                box = messagebox.showinfo("Thông báo", "Xóa học phần thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Xóa học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+    def update_hp(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Bạn có muốn sửa học phần này không?")
+        if check == "yes":
+            try:
+                hp = hocphan(self.txt_mhp.get(),self.txt_tenhp.get(),self.txt_stc.get(),self.txt_hk.get())
+                hocphanService.update(hp)
+                box = messagebox.showinfo("Thông báo", "Sửa học phần thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Sửa học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+
     # return infohp_lbframe
 class table():
     def __init__(self, frame, label_frame):

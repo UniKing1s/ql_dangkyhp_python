@@ -1,15 +1,22 @@
 from ktcuoiki_python.models.cruds import dangkyService,sinhvienService
+from ktcuoiki_python.models.objects.sinhvien import Sinhvien
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+from tkcalendar import DateEntry
+from datetime import date, datetime
 class lb_frame():
-    def __init__(self, frame):
+    def __init__(self, frame, btn_them, btn_sua,btn_xoa):
         self.txt_massv = tk.StringVar()
         self.txt_hosv = tk.StringVar()
         self.txt_tensv= tk.StringVar()
-        self.txt_ngaysinh = tk.StringVar()
+        # self.txt_ngaysinh = tk.StringVar()
+        self.ngaysinh_entry= None
         self.txt_gioitinh = tk.StringVar()
         self.txt_noisinh = tk.StringVar()
         self.txt_malop = tk.StringVar()
+        self.btn_them = btn_them
+        self.btn_sua = btn_sua
+        self.btn_xoa = btn_xoa
         self.load(frame)
     def load(self,frame):
         infohp_lbframe = tk.LabelFrame(frame, text="Thông tin sinh viên")
@@ -28,7 +35,9 @@ class lb_frame():
         massv_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_massv)
         hosv_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_hosv)
         tensv_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_tensv)
-        ngaysinh_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_ngaysinh)
+        # ngaysinh_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_ngaysinh)
+        self.ngaysinh_entry = DateEntry(infohp_lbframe, date_pattern="YYYY-MM-DD")
+        # self.ngaysinh_entry.configure(justify="left")
         gioitinh_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_gioitinh)
         noisinh_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_noisinh)
         malop_entry = tk.Entry(infohp_lbframe, textvariable=self.txt_malop)
@@ -42,24 +51,68 @@ class lb_frame():
         gioitinh_lb.grid(row=4, column=0)
         noisinh_lb.grid(row=5, column=0)
         malop_lb.grid(row=6, column=0)
-
         # các entry ô nhập liệu mỗi dòng cột 1
         massv_entry.grid(row=0, column=1)
         hosv_entry.grid(row=1, column=1)
         tensv_entry.grid(row=2, column=1)
-        ngaysinh_entry.grid(row=3, column=1)
+        self.ngaysinh_entry.grid(row=3, column=1)
         gioitinh_entry.grid(row=4, column=1)
         noisinh_entry.grid(row=5, column=1)
         malop_entry.grid(row=6, column=1)
+
+        ###setting for button them sua xoa command
+        self.btn_them.config(command= lambda : self.add_sv())
+        self.btn_sua.config(command= lambda : self.update_sv())
+        self.btn_xoa.config(command=lambda: self.delete_sv())
     def setInfo(self, massv,hosv, tensv,ngaysinh,gioitinh,noisinh,malop):
         self.txt_massv.set(massv)
         self.txt_hosv.set(hosv)
         self.txt_tensv.set(tensv)
-        self.txt_ngaysinh.set(ngaysinh)
+        # Dùng module datetime để set chuỗi ngày sinh lấy được thành date và set cho entry
+        self.ngaysinh_entry.set_date(datetime.strptime(ngaysinh, "%Y-%m-%d"))
         self.txt_gioitinh.set(gioitinh)
         self.txt_noisinh.set(noisinh)
         self.txt_malop.set(malop)
-    # return infohp_lbframe
+    def add_sv(self):
+        check = messagebox.askquestion("Thông báo", "Mã sinh viên sẽ tự động tạo mới!\nBạn có muốn thêm sinh viên này không?")
+        if check == "yes":
+            try:
+                sv = Sinhvien(self.txt_massv.get(), self.txt_hosv.get(), self.txt_tensv.get(),
+                              self.ngaysinh_entry.get(),
+                              self.txt_gioitinh.get(), self.txt_noisinh.get(), self.txt_malop.get())
+                sinhvienService.insert(sv)
+                box = messagebox.showinfo("Thông báo", "Thêm sinh viên thành công")
+            except:
+                box = messagebox.showerror("Thông báo", "Thêm sinh viên thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+
+    def update_sv(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Bạn có chắc muốn sửa thông tin của sinh viên")
+        if check == "yes":
+            try:
+                sv = Sinhvien(self.txt_massv.get(), self.txt_hosv.get(), self.txt_tensv.get(),
+                              self.ngaysinh_entry.get(),
+                              self.txt_gioitinh.get(), self.txt_noisinh.get(), self.txt_malop.get())
+                sinhvienService.update(sv)
+                box = messagebox.showinfo("Thông báo", "Sửa sinh viên thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Sửa sinh viên thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+    def delete_sv(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Bạn có chắc muốn xóa thông tin của sinh viên")
+        if check == "yes":
+            try:
+                # sv = Sinhvien(self.txt_massv.get(), self.txt_hosv.get(), self.txt_tensv.get(),
+                #               self.ngaysinh_entry.get(),
+                #               self.txt_gioitinh.get(), self.txt_noisinh.get(), self.txt_malop.get())
+                print(self.txt_massv.get());
+                sinhvienService.delete(self.txt_massv.get())
+                box = messagebox.showinfo("Thông báo", "Xóa sinh viên thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Xóa thông tin sinh viên thất bại do không có mã sinh viên tương ứng hoặc chưa nhập mã sinh viên")
+
 class table():
     def __init__(self, frame, label_frame):
         self.lb_frame = label_frame
@@ -90,6 +143,7 @@ class table():
         scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL, command= self.table.xview)
         self.table.configure(xscrollcommand=scroll.set)
         scroll.pack(side=tk.BOTTOM, fill='x')
+
     def handle_selectItem(self, event):
         selection = self.table.selection()
         for i in selection:

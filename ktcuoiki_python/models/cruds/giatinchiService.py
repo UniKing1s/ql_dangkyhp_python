@@ -32,12 +32,18 @@ def insert(gia, nam):
     cursor.execute(f"insert into giatinchi values ({gia},{nam})")
     connection.commit()
     connection.close()
+def update(gia, nam):
+    connection = open_connection()
+    cursor.execute(f"update giatinchi set gia = {gia} where namhoc = {nam}")
+    connection.commit()
+    connection.close()
 def delete(nam):
     connection = open_connection()
     cursor.execute(f"delete from giatinchi where namhoc = {nam}")
     connection.commit()
     connection.close()
-for i in getAll():
-    print(i.showInfo())
-for i in getAll():
-    print(i.showInfo())
+# for i in getAll():
+#     print(i.showInfo())
+# for i in getAll():
+#     print(i.showInfo())
+# update(2000000,2022)

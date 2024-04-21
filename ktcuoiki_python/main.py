@@ -60,7 +60,6 @@ def create_mainview():
     # # Scrollbar
     # scrollbar = Scrollbar(frame, orient="vertical")  # command=frame_table.yview()
     # scrollbar.grid(row=1, column=7, sticky='ns', pady=10)  # Fix the error here
-
     # Link Listbox with Scrollbar
     # lb.config(yscrollcommand=scrollbar.set)
     # frame_table2 = Frame(frame,width=100,height=20)
@@ -84,36 +83,36 @@ def create_mainview():
     button10.pack(side=tk.RIGHT, fill='both', expand=True)
 
     ##set event
-    button2.config(command= lambda : create_QLHP(frame_label_table, frame_for_infor,root))
-    button3.config(command= lambda : create_QLSV(frame_label_table, frame_for_infor,root))
-    button4.config(command= lambda : create_QLGIATC(frame_label_table,frame_for_infor,root))
-    button5.config(command= lambda : create_QLDKHP(frame_label_table, frame_for_infor,root))
+    button2.config(command= lambda : create_QLHP(frame_label_table, frame_for_infor,root, button8, button10, button9))
+    button3.config(command= lambda : create_QLSV(frame_label_table, frame_for_infor,root, button8, button10, button9))
+    button4.config(command= lambda : create_QLGIATC(frame_label_table,frame_for_infor,root, button8, button10, button9))
+    button5.config(command= lambda : create_QLDKHP(frame_label_table, frame_for_infor,root, button8, button10, button9))
     # button2.config(state= tk.DISABLED)
     root.mainloop()
 
 
 
-def create_QLHP(frame_table, frame_input, root):
+def create_QLHP(frame_table, frame_input, root, btn_them, btn_sua, btn_xoa):
     clear_frame(frame_table,frame_input)
-    lb_frame = ql_hocphan.lb_frame(frame_input)
+    lb_frame = ql_hocphan.lb_frame(frame_input,btn_them,btn_sua,btn_xoa)
     table = ql_hocphan.table(frame_table, lb_frame)
     root.update()
 
-def create_QLSV(frame_table,frame_input, root):
+def create_QLSV(frame_table,frame_input, root, btn_them, btn_sua, btn_xoa):
     clear_frame(frame_table,frame_input)
-    lb_frame = ql_sinhvien.lb_frame(frame_input)
+    lb_frame = ql_sinhvien.lb_frame(frame_input,btn_them,btn_sua,btn_xoa)
     table = ql_sinhvien.table(frame_table, lb_frame)
     root.update()
 
-def create_QLDKHP(frame_table,frame_input, root):
+def create_QLDKHP(frame_table,frame_input, root, btn_them, btn_sua, btn_xoa):
     clear_frame(frame_table,frame_input)
-    lb_frame = ql_dkhp.lb_frame(frame_input)
+    lb_frame = ql_dkhp.lb_frame(frame_input,btn_them,btn_sua,btn_xoa)
     table = ql_dkhp.table(frame_table, lb_frame)
     root.update()
 
-def create_QLGIATC(frame_table,frame_input, root):
+def create_QLGIATC(frame_table,frame_input, root, btn_them, btn_sua, btn_xoa):
     clear_frame(frame_table, frame_input)
-    lb_frame = ql_giatinchi.lb_frame(frame_input)
+    lb_frame = ql_giatinchi.lb_frame(frame_input,btn_them,btn_sua,btn_xoa)
     table = ql_giatinchi.table(frame_table, lb_frame)
     root.update()
 
@@ -125,4 +124,5 @@ def clear_frame(frame_table,frame_input):
             i.destroy()
     except:
         print("nothing")
+
 create_mainview()

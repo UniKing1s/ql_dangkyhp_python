@@ -1,13 +1,19 @@
 from ktcuoiki_python.models.cruds import dangkyService
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+from ktcuoiki_python.models.objects.dkhp import dkhp
 class lb_frame():
-    def __init__(self, frame):
+    def __init__(self, frame, btn_them, btn_sua,btn_xoa):
+        self.table = None
         self.txt_masv = tk.StringVar()
         self.txt_mahp = tk.StringVar()
         self.txt_ngaydangky = tk.StringVar()
         self.txt_ngaydongphi = tk.StringVar()
         self.dathanhtoan_boolean = tk.IntVar()
+        self.btn_them = btn_them
+        self.btn_sua = btn_sua
+        self.btn_xoa = btn_xoa
         self.load(frame)
     def load(self,frame):
         infohp_lbframe = tk.LabelFrame(frame, text="Thông tin đăng ký học phần")
@@ -48,6 +54,48 @@ class lb_frame():
         ngaydangky_lb_show.grid(row=2, column=1)
         ngaydongphi_lb_show.grid(row=3, column=1)
         dathanhtoan_lb_show.grid(row=4, column=1)
+        ###setting for button them sua xoa command
+        self.btn_them.config(command=lambda: self.insert_dkhp())
+        self.btn_sua.config(command=lambda: self.update_dkhp())
+        self.btn_xoa.config(command=lambda: self.delete_dkhp())
+    def subscribe_table(self, table):
+        self.table = table;
+    def insert_dkhp(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Bạn có chắc đăng ký học phần cho sinh viên này?")
+        if check == "yes":
+            try:
+                hpdk = dkhp(self.txt_masv.get(),self.txt_mahp.get(),self.txt_ngaydangky.get(),self.txt_ngaydongphi.get(),self.dathanhtoan_boolean.get())
+                dangkyService.insert(hpdk.masv,hpdk.mahp)
+                box = messagebox.showinfo("Thông báo", "Đăng ký học phần thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Đăng ký học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+        self.table.load_data_table()
+    def update_dkhp(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Bạn có chắc sửa thông tin đăng ký học phần cho sinh viên này?")
+        if check == "yes":
+            try:
+                hpdk = dkhp(self.txt_masv.get(),self.txt_mahp.get(),self.txt_ngaydangky.get(),self.txt_ngaydongphi.get(),self.dathanhtoan_boolean.get())
+                dangkyService.update(hpdk)
+                box = messagebox.showinfo("Thông báo", "Sửa thông tin đăng ký học phần thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Sửa thông tin đăng ký học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+        self.table.load_data_table()
+    def delete_dkhp(self):
+        check = messagebox.askquestion("Thông báo",
+                                       "Bạn có chắc xóa thông tin đăng ký học phần cho sinh viên này?")
+        if check == "yes":
+            try:
+                hpdk = dkhp(self.txt_masv.get(),self.txt_mahp.get(),self.txt_ngaydangky.get(),self.txt_ngaydongphi.get(),self.dathanhtoan_boolean.get())
+                dangkyService.delete(hpdk.masv,hpdk.mahp)
+                box = messagebox.showinfo("Thông báo", "Xóa thông tin đăng ký học phần thành công")
+            except:
+                box = messagebox.showerror("Thông báo",
+                                           "Xóa thông tin đăng ký học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+        self.table.load_data_table()
 
     def setInfo(self, masv, mahp, ngaydangky, ngaydongphi, dathanhtoan):
         self.txt_masv.set(masv)
@@ -83,10 +131,15 @@ class table():
         scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL, command= self.table.xview)
         self.table.configure(xscrollcommand=scroll.set)
         scroll.pack(side=tk.BOTTOM, fill='x')
+        self.load_data_table();
+        self.lb_frame.subscribe_table(self)
 
+    def load_data_table(self):
+        self.table.delete(*self.table.get_children())
         for i in dangkyService.getAll():
             self.table.insert(parent='', index=tk.END, values=i.showInfo())
         self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
+
     def handle_selectItem(self, event):
         selection = self.table.selection()
         for i in selection:
