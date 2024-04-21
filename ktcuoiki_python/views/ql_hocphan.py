@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter import messagebox
 class lb_frame():
     def __init__(self, frame, btn_them, btn_sua, btn_xoa):
+        self.table = None
         self.txt_mhp = tk.StringVar()
         self.txt_tenhp = tk.StringVar()
         self.txt_stc = tk.StringVar()
@@ -43,6 +44,8 @@ class lb_frame():
         self.btn_them.config(command=lambda: self.insert_hp())
         self.btn_xoa.config(command=lambda: self.delete_hp())
         self.btn_sua.config(command = lambda: self.update_hp())
+    def subscribe_table(self, table):
+        self.table = table;
     def setInfo(self, mahp,tenhp, stc,hocki):
         self.txt_mhp.set(mahp)
         self.txt_tenhp.set(tenhp)
@@ -56,6 +59,7 @@ class lb_frame():
                 hp = hocphan(self.txt_mhp.get(),self.txt_tenhp.get(),self.txt_stc.get(),self.txt_hk.get())
                 hocphanService.insert(hp)
                 box = messagebox.showinfo("Thông báo", "Thêm học phần thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Thêm học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
@@ -67,6 +71,7 @@ class lb_frame():
                 hp = hocphan(self.txt_mhp.get(),self.txt_tenhp.get(),self.txt_stc.get(),self.txt_hk.get())
                 hocphanService.delete(hp.mahp)
                 box = messagebox.showinfo("Thông báo", "Xóa học phần thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Xóa học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
@@ -78,6 +83,7 @@ class lb_frame():
                 hp = hocphan(self.txt_mhp.get(),self.txt_tenhp.get(),self.txt_stc.get(),self.txt_hk.get())
                 hocphanService.update(hp)
                 box = messagebox.showinfo("Thông báo", "Sửa học phần thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Sửa học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
@@ -110,6 +116,13 @@ class table():
         scroll.pack(side=tk.BOTTOM, fill='x')
 
 
+        # for i in hocphanService.getAll():
+        #     self.table.insert(parent='', index=tk.END, values=i.showInfo())
+        # self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
+        self.load_data_table()
+        self.lb_frame.subscribe_table(self)
+    def load_data_table(self):
+        self.table.delete(*self.table.get_children())
         for i in hocphanService.getAll():
             self.table.insert(parent='', index=tk.END, values=i.showInfo())
         self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)

@@ -68,6 +68,7 @@ class lb_frame():
                 hpdk = dkhp(self.txt_masv.get(),self.txt_mahp.get(),self.txt_ngaydangky.get(),self.txt_ngaydongphi.get(),self.dathanhtoan_boolean.get())
                 dangkyService.insert(hpdk.masv,hpdk.mahp)
                 box = messagebox.showinfo("Thông báo", "Đăng ký học phần thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Đăng ký học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
@@ -80,10 +81,11 @@ class lb_frame():
                 hpdk = dkhp(self.txt_masv.get(),self.txt_mahp.get(),self.txt_ngaydangky.get(),self.txt_ngaydongphi.get(),self.dathanhtoan_boolean.get())
                 dangkyService.update(hpdk)
                 box = messagebox.showinfo("Thông báo", "Sửa thông tin đăng ký học phần thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Sửa thông tin đăng ký học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
-        self.table.load_data_table()
+
     def delete_dkhp(self):
         check = messagebox.askquestion("Thông báo",
                                        "Bạn có chắc xóa thông tin đăng ký học phần cho sinh viên này?")
@@ -92,10 +94,10 @@ class lb_frame():
                 hpdk = dkhp(self.txt_masv.get(),self.txt_mahp.get(),self.txt_ngaydangky.get(),self.txt_ngaydongphi.get(),self.dathanhtoan_boolean.get())
                 dangkyService.delete(hpdk.masv,hpdk.mahp)
                 box = messagebox.showinfo("Thông báo", "Xóa thông tin đăng ký học phần thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Xóa thông tin đăng ký học phần thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
-        self.table.load_data_table()
 
     def setInfo(self, masv, mahp, ngaydangky, ngaydongphi, dathanhtoan):
         self.txt_masv.set(masv)

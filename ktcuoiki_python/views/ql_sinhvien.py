@@ -6,6 +6,7 @@ from tkcalendar import DateEntry
 from datetime import date, datetime
 class lb_frame():
     def __init__(self, frame, btn_them, btn_sua,btn_xoa):
+        self.table = None
         self.txt_massv = tk.StringVar()
         self.txt_hosv = tk.StringVar()
         self.txt_tensv= tk.StringVar()
@@ -64,6 +65,8 @@ class lb_frame():
         self.btn_them.config(command= lambda : self.add_sv())
         self.btn_sua.config(command= lambda : self.update_sv())
         self.btn_xoa.config(command=lambda: self.delete_sv())
+    def subscribe_table(self, table):
+        self.table = table;
     def setInfo(self, massv,hosv, tensv,ngaysinh,gioitinh,noisinh,malop):
         self.txt_massv.set(massv)
         self.txt_hosv.set(hosv)
@@ -82,6 +85,7 @@ class lb_frame():
                               self.txt_gioitinh.get(), self.txt_noisinh.get(), self.txt_malop.get())
                 sinhvienService.insert(sv)
                 box = messagebox.showinfo("Thông báo", "Thêm sinh viên thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo", "Thêm sinh viên thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
 
@@ -95,6 +99,7 @@ class lb_frame():
                               self.txt_gioitinh.get(), self.txt_noisinh.get(), self.txt_malop.get())
                 sinhvienService.update(sv)
                 box = messagebox.showinfo("Thông báo", "Sửa sinh viên thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Sửa sinh viên thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
@@ -109,6 +114,7 @@ class lb_frame():
                 print(self.txt_massv.get());
                 sinhvienService.delete(self.txt_massv.get())
                 box = messagebox.showinfo("Thông báo", "Xóa sinh viên thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Xóa thông tin sinh viên thất bại do không có mã sinh viên tương ứng hoặc chưa nhập mã sinh viên")
@@ -137,12 +143,20 @@ class table():
         style = ttk.Style(self.table)
         style.configure('Treeview', rowheight = 40)
         # self.table.grid(row=0, column=0, rowspan= 7)
-        for i in sinhvienService.getAll():
-            self.table.insert(parent='', index=tk.END, values=i.showInfo())
-        self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
+        # for i in sinhvienService.getAll():
+        #     self.table.insert(parent='', index=tk.END, values=i.showInfo())
+        # self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
         scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL, command= self.table.xview)
         self.table.configure(xscrollcommand=scroll.set)
         scroll.pack(side=tk.BOTTOM, fill='x')
+        self.load_data_table()
+        self.lb_frame.subscribe_table(self)
+
+    def load_data_table(self):
+        self.table.delete(*self.table.get_children())
+        for i in sinhvienService.getAll():
+            self.table.insert(parent='', index=tk.END, values=i.showInfo())
+        self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
 
     def handle_selectItem(self, event):
         selection = self.table.selection()

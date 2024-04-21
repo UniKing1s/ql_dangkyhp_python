@@ -36,8 +36,20 @@ def getAllHpBySV(masv):
     conn.close()
     return rows
 def insert(hocphan):
+    maxMahp = (int(getMaxMasv()[0][0]) + 1)
     conn = open_connection()
-    cursor.execute(f"insert into hocphan values('{(int(getMaxMasv()[0][0]))}',N'{hocphan.tenhp}',{hocphan.stc},{hocphan.hk})")
+
+    # print(maxMahp)
+    if maxMahp < 100:
+        mahp = '0'+str(maxMahp)
+        # print(mahp)
+    # print(mahp)
+    cursor.execute(f"insert into hocphan values('{mahp}',N'{hocphan.tenhp}',{hocphan.stc},{hocphan.hk})")
+    # try:
+    #
+    # except:
+    #     print("Lỗi")
+
     conn.commit()
     conn.close()
 def update(hocphan):
@@ -56,8 +68,9 @@ def getMaxMasv():
     rows = cursor.fetchall()
     conn.close()
     return rows
-# hp = hocphan('3131',"hp1",1,1)
+hp = hocphan('3131',"hp1",1,1)
 # insert(hp)
 # delete('8655')
 # for i in getAll():
 #     print(i.showInfo())
+# insert(hp)

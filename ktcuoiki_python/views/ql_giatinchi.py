@@ -6,6 +6,7 @@ from tkinter import ttk, messagebox
 
 class lb_frame():
     def __init__(self, frame ,btn_them, btn_sua,btn_xoa):
+        self.table = None
         self.txt_gia = tk.StringVar()
         self.txt_namhoc = tk.StringVar()
         self.btn_them = btn_them
@@ -39,7 +40,8 @@ class lb_frame():
         self.btn_them.config(command=lambda: self.insert())
         self.btn_sua.config(command=lambda: self.udate())
         self.btn_xoa.config(command=lambda: self.delete())
-
+    def subscribe_table(self, table):
+        self.table = table;
 
     def setInfo(self, gia, namhoc):
         self.txt_gia.set(gia)
@@ -52,9 +54,11 @@ class lb_frame():
                 gtc = giatinchi(self.txt_gia.get(), self.txt_namhoc.get())
                 giatinchiService.insert(gtc.gia,gtc.namhoc)
                 box = messagebox.showinfo("Thông báo", "Thêm giá tín chỉ thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Thêm giá tín chỉ thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
+
     def udate(self):
         check = messagebox.askquestion("Thông báo",
                                        "Bạn có chắc muốn sửa giá tín chỉ cho năm học này không?")
@@ -63,6 +67,7 @@ class lb_frame():
                 # gtc = giatinchi(self.txt_gia.get(), self.txt_namhoc.get())
                 giatinchiService.update(int(self.txt_gia.get()), int(self.txt_namhoc.get()))
                 box = messagebox.showinfo("Thông báo", "Sửa giá tín chỉ thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Sửa giá tín chỉ thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
@@ -74,6 +79,7 @@ class lb_frame():
                 # gtc = giatinchi(self.txt_gia.get(), self.txt_namhoc.get())
                 giatinchiService.delete(int(self.txt_namhoc.get()))
                 box = messagebox.showinfo("Thông báo", "Xóa giá tín chỉ thành công")
+                self.table.load_data_table()
             except:
                 box = messagebox.showerror("Thông báo",
                                            "Xóa giá tín chỉ thất bại!!\nVui lòng kiểm tra lại thông tin đã nhập")
@@ -97,7 +103,15 @@ class table():
         scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL, command= self.table.xview)
         self.table.configure(xscrollcommand=scroll.set)
         scroll.pack(side=tk.BOTTOM, fill='x')
-
+        # load dữ liệu tree view
+        self.load_data_table()
+        # đăng ký table của label frame = bảng này
+        self.lb_frame.subscribe_table(self)
+        # for i in giatinchiService.getAll():
+        #     self.table.insert(parent='', index=tk.END, values=i.showInfo())
+        # self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
+    def load_data_table(self):
+        self.table.delete(*self.table.get_children())
         for i in giatinchiService.getAll():
             self.table.insert(parent='', index=tk.END, values=i.showInfo())
         self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
