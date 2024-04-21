@@ -38,6 +38,7 @@ def getAllHpBySV(masv):
     for row in rows:
         lst.append(hocphan(row[0], row[1], row[2], row[3]))
     return lst
+
 def insert(hocphan):
     maxMahp = (int(getMaxMasv()[0][0]) + 1)
     conn = open_connection()

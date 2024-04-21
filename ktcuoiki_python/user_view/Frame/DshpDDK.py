@@ -36,6 +36,7 @@ class lb_frame():
         self.txt_ngaydongphi = tk.StringVar()
         self.dathanhtoan_boolean = tk.IntVar()
         self.dathanhtoan_label = tk.StringVar()
+        self.tongtien = tk.IntVar()
         self.load(frame)
     def load(self,frame):
         infohp_lbframe = tk.LabelFrame(frame, text="Thông tin đăng ký học phần")
@@ -47,14 +48,14 @@ class lb_frame():
         ngaydangky_lb = tk.Label(infohp_lbframe, text="Ngày đăng ký:",font = ("Arial", 11, "bold"))
         ngaydongphi_lb = tk.Label(infohp_lbframe, text="Ngày đóng phí:",font = ("Arial", 11, "bold"))
         dathanhtoan_lb = tk.Label(infohp_lbframe, text="Thanh toán: ",font = ("Arial", 11, "bold"))
-
+        tongtien_lb = tk.Label(infohp_lbframe, text="Tổng tiền học phần: ", font=("Arial", 11, "bold"))
         # Tạo ô nhập
         masv_entry = tk.Label(infohp_lbframe, textvariable=self.txt_masv)
         mahp_entry = tk.Label(infohp_lbframe, textvariable=self.txt_mahp)
         # self.txt_ngaydangky.set('alvsdvsdv')
         ngaydangky_lb_show = tk.Label(infohp_lbframe, textvariable=self.txt_ngaydangky)
         ngaydongphi_lb_show = tk.Label(infohp_lbframe, textvariable=self.txt_ngaydongphi)
-
+        tongtien_lb_show = tk.Label(infohp_lbframe, textvariable=self.tongtien)
 
         # tk.StringVar()
         dathanhtoan_lb_show = tk.Label(infohp_lbframe, textvariable = self.dathanhtoan_label)
@@ -68,7 +69,7 @@ class lb_frame():
         ngaydangky_lb.grid(row=2, column=0)
         ngaydongphi_lb.grid(row=3, column=0)
         dathanhtoan_lb.grid(row=4, column=0)
-
+        tongtien_lb.grid(row=5, column=0)
 
         # các entry ô nhập liệu mỗi dòng cột 1
         masv_entry.grid(row=0, column=1)
@@ -76,15 +77,17 @@ class lb_frame():
         ngaydangky_lb_show.grid(row=2, column=1)
         ngaydongphi_lb_show.grid(row=3, column=1)
         dathanhtoan_lb_show.grid(row=4, column=1)
+        tongtien_lb_show.grid(row=5,column=1)
         ###setting for button them sua xoa command
     def subscribe_table(self, table):
         self.table = table
-    def setInfo(self, masv, mahp, ngaydangky, ngaydongphi, dathanhtoan):
+    def setInfo(self, masv, mahp, ngaydangky, ngaydongphi, dathanhtoan, tongtien):
         self.txt_masv.set(masv)
         self.txt_mahp.set(mahp)
         self.txt_ngaydangky.set(ngaydangky)
         self.txt_ngaydongphi.set(ngaydongphi)
         self.dathanhtoan_boolean.set(dathanhtoan)
+        self.tongtien.set(tongtien)
         if dathanhtoan == 1:
             self.dathanhtoan_label.set("Đã thanh toán")
         else:
@@ -92,7 +95,7 @@ class lb_frame():
 class table():
     def __init__(self, frame, label_frame, masv):
         self.lb_frame = label_frame
-        self.table = ttk.Treeview(frame, columns=("1", "2", "3", "4", "5"), show="headings", selectmode="browse")
+        self.table = ttk.Treeview(frame, columns=("1", "2", "3", "4", "5","6"), show="headings", selectmode="browse")
         self.load_table(frame,masv)
     def load_table(self,frame,masv):
         self.table.heading("1", text="MSSV")
@@ -100,11 +103,13 @@ class table():
         self.table.heading("3", text="Ngày đăng ký")
         self.table.heading("4", text="Ngày đóng phí")
         self.table.heading("5", text="Thanh toán")
+        self.table.heading("6", text="Tổng tiền hp")
         self.table.column('1',width=40, minwidth=40)
         self.table.column('2',width=40, minwidth=40)
         self.table.column('3',width=70, minwidth=70)
         self.table.column('4',width=70, minwidth=70)
         self.table.column('5',width=30, minwidth=20)
+        self.table.column('5', width=50, minwidth=50)
 
         # self.table.grid(row=0, column=0)
         self.table.pack(fill='both',expand=True)
@@ -120,12 +125,12 @@ class table():
 
     def load_data_table(self, masv):
         self.table.delete(*self.table.get_children())
-        for i in dangkyService.getAllByMasv(masv):
-            self.table.insert(parent='', index=tk.END, values=i.showInfo())
+        for i in dangkyService.getAllByMasvHaveMoney(masv):
+            self.table.insert(parent='', index=tk.END, values=i.showInfoWithTong())
         self.table.bind('<<TreeviewSelect>>', self.handle_selectItem)
 
     def handle_selectItem(self, event):
         selection = self.table.selection()
         for i in selection:
             store = self.table.item(i, "values")
-            self.lb_frame.setInfo(store[0],store[1],store[2],store[3],store[4])
+            self.lb_frame.setInfo(store[0],store[1],store[2],store[3],store[4],store[5])

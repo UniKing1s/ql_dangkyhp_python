@@ -38,7 +38,7 @@ class main_view_user ():
 
 
         # frame chứa các tính năng chính
-        self.lbfrTong = LabelFrame(self.frame, text="LlFr tổng chức năng", bg='#b0c4de')
+        self.lbfrTong = LabelFrame(self.frame, bg='#b0c4de')
         self.lbfrTong.pack(fill='both', expand=True)
 
 

@@ -28,6 +28,22 @@ def getAllByMasv(masv):
         dk_hp = dkhp(row[0], row[1], row[2], row[3], row[4])
         lst.append(dk_hp)
     return lst
+def getAllByMasvHaveMoney(masv):
+    connection = open_connection()
+    lst = []
+    cursor.execute(f"Select sinhvien.masv, dkhp.mahp, ngaydangky, "
+                   f"ngaydongphi, dathanhtoan, (hocphan.stc * giatinchi.gia) "
+                   f"from dkhp join hocphan ON hocphan.mahp = dkhp.mahp "
+                   f"JOIN sinhvien on sinhvien.masv = dkhp.masv "
+                   f"join lop on lop.malop = sinhvien.malop "
+                   f"join giatinchi on giatinchi.namhoc = lop.nam where dkhp.masv = '{masv}'")
+    rows = cursor.fetchall()
+    connection.close()
+    for row in rows:
+        dk_hp = dkhp(row[0], row[1], row[2], row[3], row[4])
+        dk_hp.setTongTien(row[5])
+        lst.append(dk_hp)
+    return lst
 def insert(masv, mahp):
     connection = open_connection()
     cursor.execute(f"insert into dkhp (masv, mahp) values ('{masv}','{mahp}')")
@@ -62,3 +78,6 @@ def delete(masv, mahp):
 # for i in getAll("2402"):
 #     print(i.showInfo())
 # insert('2401','005')
+# for i in getAllByMasvHaveMoney('2401'):
+#
+#     print(i.showInfoWithTong())
