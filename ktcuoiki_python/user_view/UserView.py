@@ -5,7 +5,6 @@ from Frame.InfoFrame import InfoFrame
 from Frame.Dshp import Dshp
 from Frame.DshpDDK import DshpDDK
 from ktcuoiki_python.models.cruds import sinhvienService
-from ktcuoiki_python.models.objects.sinhvien import Sinhvien
 
 
 class main_view_user ():
@@ -13,7 +12,7 @@ class main_view_user ():
 
         self.mssv = masv
 
-        win = Tk()
+        win = Toplevel()
         win.title('Ứng Dụng Quản Lý Đăng Ký Học Phần')
         win.geometry
         heightGlobal = 500
@@ -53,7 +52,7 @@ class main_view_user ():
 
 
         # add hình ảnh
-        self.img = Image.open("./anhdaidien.jpg")
+        self.img = Image.open("anhdaidien.jpg")
         self.img = self.img.resize((100, 100))
         self.img = ImageTk.PhotoImage(self.img)
 
@@ -69,6 +68,7 @@ class main_view_user ():
 
         # add hình ảnh vào label chung với thông tin
         Lbimage = Label(self.lbfrInfo, image=self.img, compound=LEFT)
+        # Lbimage = Label(self.lbfrInfo, text="hình", compound=LEFT)
         Lbimage.pack(side=LEFT,anchor='nw')
         Lbimage.config(borderwidth=1, relief="solid")
 
@@ -105,7 +105,7 @@ class main_view_user ():
         btDKHPed = Button(lbfrChucNang, text="Học Phần Đã Đăng Ký", command=self.getClickDSHPDDK)
         btDKHPed.pack(fill='x', side=TOP)
 
-        btLogout = Button(lbfrChucNang, text="Đăng Xuất", bg='#fa8072', fg='#000000')
+        btLogout = Button(lbfrChucNang, text="Đăng Xuất", bg='#fa8072', fg='#000000', command= lambda : win.destroy())
         btLogout.pack(fill='x', side=BOTTOM)
         win.mainloop()
 
@@ -136,17 +136,5 @@ class main_view_user ():
         infoF = InfoFrame(self.lbfrRight)
         infoF.setFrame(self.mssv)
 
-
-
-
-
-
-    # Cái frame chứa mấy cái nút chức năng
-
-    # cái label nằng bên trong cái frame củ lol chà bá nằm bên phải
-    # lbTest = Label(lbfrRight, text="Test cái label")
-    # lbTest.pack(expand=True,fill='both')
-
-main_view_user('2401')
 
 

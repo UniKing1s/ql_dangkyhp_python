@@ -1,5 +1,6 @@
 import tkinter as tk
 from ktcuoiki_python.models.cruds import loginService
+import adminView
 from tkinter import  messagebox
 from ktcuoiki_python.views import ql_hocphan
 from setuptools.msvc import winreg
@@ -44,10 +45,11 @@ class login_view():
 
     def button_click(self):
         print("Button clicked!")
-        if len(loginService.checkLogin(self.masv_input.get(),self.pas_input.get())) == 0:
-            print("Thông tin sai")
+        if self.masv_input.get() != "admin" and self.pas_input.get() != "1234567":
+            # print("Thông tin sai")
+            messagebox.showerror("Thông báo","Sai thông tin đăng nhập")
         else:
             self.window.destroy()
             print("Đăng nhập thành công")
-            # mainView.createMainView()
+            adminView.create_mainview()
 login_view()

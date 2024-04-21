@@ -125,4 +125,4 @@ def clear_frame(frame_table,frame_input):
     except:
         print("nothing")
 
-create_mainview()
+# create_mainview()
